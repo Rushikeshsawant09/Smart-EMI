@@ -10,6 +10,7 @@ Smart EMI is a modern, responsive web-based loan and EMI calculator built using 
 
 
 
+
 *Features
 
 EMI Calculator using standard financial formula
