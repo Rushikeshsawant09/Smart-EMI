@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart EMI</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="theme-toggle" id="themeToggle">
+        <span class="theme-icon">🌙</span>
+    </div>
+
+    <div class="container">
+        <header class="header">
+         <svg width="420" height="110" viewBox="0 0 420 110" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C9A24D"/>
+      <stop offset="100%" stop-color="#F2D57E"/>
+    </linearGradient>
+
+    <linearGradient id="navyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A1F44"/>
+      <stop offset="100%" stop-color="#1B3B6F"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Logo Circle -->
+  <circle cx="55" cy="55" r="42" fill="url(#navyGrad)"/>
+  <circle cx="55" cy="55" r="36" fill="#0E2A52"/>
+
+  <!-- Bars
+  <rect x="40" y="70" width="6" height="12" rx="2" fill="url(#goldGrad)"/>
+  <rect x="49" y="63" width="6" height="19" rx="2" fill="url(#goldGrad)"/>
+  <rect x="58" y="55" width="6" height="27" rx="2" fill="url(#goldGrad)"/> -->
+
+  <!-- Rupee -->
+  <text x="41" y="74" font-size="54" font-weight="700" fill="url(#goldGrad)" font-family="Poppins, Arial">₹</text>
+
+  <!-- Arrow
+  <path d="M25 70 C50 30, 75 35, 90 45" stroke="url(#goldGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <polygon points="87,42 96,46 88,51" fill="#E6C36A"/> -->
+
+  <!-- Brand Text -->
+  <text x="100" y="72" font-size="47" font-weight="600" font-family="Poppins, Arial">
+    <tspan fill="#1B3B6F">Smart</tspan>
+    <tspan fill="url(#goldGrad)"> EMI</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="100" y="92" font-size="17"  fill="#3E4C5F" letter-spacing="2" font-family="Poppins, Arial">
+Personal Finance Toolkit </text>
+</svg>
+
+<!--             
+            <p>Personal Finance Toolkit</p> -->
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="emi">EMI Calculator</button>
+            <button class="tab-btn" data-tab="tenure">Tenure Calculator</button>
+            <button class="tab-btn" data-tab="rate">Rate Estimator</button>
+            <button class="tab-btn" data-tab="prepayment">Prepayment</button>
+        </div>
+
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+            
+            <!-- EMI Calculator Tab -->
+            <div class="tab-content active" id="emi-tab">
+                <div class="calculator-card">
+                    <h2>EMI Calculator</h2>
+                    <form id="emiForm">
+                        <div class="input-group">
+                            <label for="emiLoanAmount">Loan Amount (₹)</label>
+                            <input type="number" id="emiLoanAmount" placeholder="500000" min="1000" step="1000" required>
+                            <span class="error-msg" id="emiAmountError"></span>
+                        </div>
+                        <div class="input-group">
+                            <label for="emiInterestRate">Annual Interest Rate (%)</label>
+                            <input type="number" id="emiInterestRate" placeholder="8.5" min="0.1" max="50" step="0.1" required>
+                            <span class="error-msg" id="emiRateError"></span>
+                        </div>
+                        <div class="input-group">
+                            <label>Loan Tenure</label>
+                            <div class="tenure-input">
+                                <input type="number" id="emiTenure" placeholder="20" min="1" step="1" required>
+                                <select id="emiTenureType">
+                                    <option value="years">Years</option>
+                                    <option value="months">Months</option>
+                                </select>
+                            </div>
+                            <span class="error-msg" id="emiTenureError"></span>
+                        </div>
+                        <button type="submit" class="btn-calculate">Calculate EMI</button>
+                    </form>
+                </div>
+
+                <div id="emiResults" class="results-section hidden">
+                    <div class="summary-cards">
+                        <div class="summary-card">
+                            <div class="card-icon">📅</div>
+                            <div class="card-content">
+                                <p class="card-label">Monthly EMI</p>
+                                <p class="card-value" id="emiMonthly">₹0</p>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon">💵</div>
+                            <div class="card-content">
+                                <p class="card-label">Principal Amount</p>
+                                <p class="card-value" id="emiPrincipal">₹0</p>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon">📈</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Interest</p>
+                                <p class="card-value" id="emiInterest">₹0</p>
+                            </div>
+                        </div>
+                        <div class="summary-card highlight">
+                            <div class="card-icon">💰</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Payment</p>
+                                <p class="card-value" id="emiTotal">₹0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <h3>Payment Breakdown</h3>
+                            <canvas id="emiPieChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Balance Over Time</h3>
+                            <canvas id="emiLineChart"></canvas>
+                        </div>
+                        <div class="chart-container full-width">
+                            <h3>Principal vs Interest (Yearly)</h3>
+                            <canvas id="emiBarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="amortization-section">
+                        <div class="amortization-header">
+                            <h3>Amortization Schedule</h3>
+                            <div class="export-buttons">
+                                <button class="btn-export" id="exportPDF">📄 PDF</button>
+                                <button class="btn-export" id="exportExcel">📊 Excel</button>
+                                <button class="btn-export" id="exportCSV">📋 CSV</button>
+                                <button class="btn-export" id="printTable">🖨️ Print</button>
+                            </div>
+                        </div>
+                        
+                        <!-- View Toggle -->
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="table">📋 Table View</button>
+                            <button class="view-btn" data-view="graph">📊 Graph View</button>
+                        </div>
+                        
+                        <!-- Period Toggle -->
+                        <div class="period-toggle">
+                            <button class="period-btn active" data-period="monthly">Monthly</button>
+                            <button class="period-btn" data-period="yearly">Yearly</button>
+                        </div>
+                        
+                        <!-- Table View -->
+                        <div class="table-view active" id="tableView">
+                            <div class="table-container">
+                                <table id="emiAmortizationTable">
+                                    <thead>
+                                        <tr>
+                                            <th id="periodHeader">Month</th>
+                                            <th>EMI</th>
+                                            <th>Principal</th>
+                                            <th>Interest</th>
+                                            <th>Balance</th>
+                                            <th>Total Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="emiAmortizationBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Graph View -->
+                        <div class="graph-view" id="graphView">
+                            <div class="graph-controls">
+                                <label>
+                                    <input type="checkbox" id="showPrincipal" checked> Principal
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="showInterest" checked> Interest
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="showBalance" checked> Balance
+                                </label>
+                            </div>
+                            <canvas id="amortizationGraph"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tenure Calculator Tab -->
+            <div class="tab-content" id="tenure-tab">
+                <div class="calculator-card">
+                    <h2>Loan Tenure Calculator</h2>
+                    <form id="tenureForm">
+                        <div class="input-group">
+                            <label for="tenureLoanAmount">Loan Amount (₹)</label>
+                            <input type="number" id="tenureLoanAmount" placeholder="500000" min="1000" step="1000" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="tenureEMI">Monthly EMI (₹)</label>
+                            <input type="number" id="tenureEMI" placeholder="42000" min="100" step="100" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="tenureInterestRate">Annual Interest Rate (%)</label>
+                            <input type="number" id="tenureInterestRate" placeholder="8.5" min="0.1" max="50" step="0.1" required>
+                        </div>
+                        <button type="submit" class="btn-calculate">Calculate Tenure</button>
+                    </form>
+                </div>
+
+                <div id="tenureResults" class="results-section hidden">
+                    <div class="summary-cards">
+                        <div class="summary-card highlight">
+                            <div class="card-icon">⏱️</div>
+                            <div class="card-content">
+                                <p class="card-label">Loan Tenure</p>
+                                <p class="card-value" id="tenureMonths">0 months</p>
+                                <p class="card-sublabel" id="tenureYears">(0 years)</p>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon">💰</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Payment</p>
+                                <p class="card-value" id="tenureTotal">₹0</p>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon">📈</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Interest</p>
+                                <p class="card-value" id="tenureInterest">₹0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rate Estimator Tab -->
+            <div class="tab-content" id="rate-tab">
+                <div class="calculator-card">
+                    <h2>Interest Rate Estimator</h2>
+                    <form id="rateForm">
+                        <div class="input-group">
+                            <label for="rateLoanAmount">Loan Amount (₹)</label>
+                            <input type="number" id="rateLoanAmount" placeholder="500000" min="1000" step="1000" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="rateEMI">Monthly EMI (₹)</label>
+                            <input type="number" id="rateEMI" placeholder="42000" min="100" step="100" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Loan Tenure</label>
+                            <div class="tenure-input">
+                                <input type="number" id="rateTenure" placeholder="20" min="1" step="1" required>
+                                <select id="rateTenureType">
+                                    <option value="years">Years</option>
+                                    <option value="months">Months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-calculate">Estimate Rate</button>
+                    </form>
+                </div>
+
+                <div id="rateResults" class="results-section hidden">
+                    <div class="summary-cards">
+                        <div class="summary-card highlight">
+                            <div class="card-icon">📊</div>
+                            <div class="card-content">
+                                <p class="card-label">Estimated Interest Rate</p>
+                                <p class="card-value" id="rateEstimated">0%</p>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon">💰</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Payment</p>
+                                <p class="card-value" id="rateTotal">₹0</p>
+                            </div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="card-icon">📈</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Interest</p>
+                                <p class="card-value" id="rateInterest">₹0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prepayment Calculator Tab -->
+            <div class="tab-content" id="prepayment-tab">
+                <div class="calculator-card">
+                    <h2>Prepayment / Part Payment Simulator</h2>
+                    <form id="prepaymentForm">
+                        <div class="input-group">
+                            <label for="prepayLoanAmount">Original Loan Amount (₹)</label>
+                            <input type="number" id="prepayLoanAmount" placeholder="500000" min="1000" step="1000" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="prepayInterestRate">Annual Interest Rate (%)</label>
+                            <input type="number" id="prepayInterestRate" placeholder="8.5" min="0.1" max="50" step="0.1" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Original Tenure</label>
+                            <div class="tenure-input">
+                                <input type="number" id="prepayTenure" placeholder="20" min="1" step="1" required>
+                                <select id="prepayTenureType">
+                                    <option value="years">Years</option>
+                                    <option value="months">Months</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="prepayAmount">Prepayment Amount (₹)</label>
+                            <input type="number" id="prepayAmount" placeholder="50000" min="100" step="1000" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="prepayAfterMonths">After How Many Months?</label>
+                            <input type="number" id="prepayAfterMonths" placeholder="12" min="1" step="1" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Prepayment Option</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="prepayOption" value="reduceTenure" checked>
+                                    Reduce Tenure (Keep EMI same)
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="prepayOption" value="reduceEMI">
+                                    Reduce EMI (Keep tenure same)
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-calculate">Calculate Prepayment Impact</button>
+                    </form>
+                </div>
+
+                <div id="prepaymentResults" class="results-section hidden">
+                    <div class="comparison-section">
+                        <div class="comparison-card">
+                            <h3>Before Prepayment</h3>
+                            <div class="comparison-item">
+                                <span>Monthly EMI:</span>
+                                <strong id="prepayOriginalEMI">₹0</strong>
+                            </div>
+                            <div class="comparison-item">
+                                <span>Tenure:</span>
+                                <strong id="prepayOriginalTenure">0 months</strong>
+                            </div>
+                            <div class="comparison-item">
+                                <span>Total Interest:</span>
+                                <strong id="prepayOriginalInterest">₹0</strong>
+                            </div>
+                            <div class="comparison-item">
+                                <span>Total Payment:</span>
+                                <strong id="prepayOriginalTotal">₹0</strong>
+                            </div>
+                        </div>
+
+                        <div class="comparison-arrow">→</div>
+
+                        <div class="comparison-card highlight">
+                            <h3>After Prepayment</h3>
+                            <div class="comparison-item">
+                                <span>Monthly EMI:</span>
+                                <strong id="prepayNewEMI">₹0</strong>
+                            </div>
+                            <div class="comparison-item">
+                                <span>Tenure:</span>
+                                <strong id="prepayNewTenure">0 months</strong>
+                            </div>
+                            <div class="comparison-item">
+                                <span>Total Interest:</span>
+                                <strong id="prepayNewInterest">₹0</strong>
+                            </div>
+                            <div class="comparison-item">
+                                <span>Total Payment:</span>
+                                <strong id="prepayNewTotal">₹0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="savings-card">
+                        <h3>💰 Your Savings</h3>
+                        <div class="savings-grid">
+                            <div class="saving-item">
+                                <span>Interest Saved:</span>
+                                <strong id="prepaySavedInterest" class="saved-amount">₹0</strong>
+                            </div>
+                            <div class="saving-item">
+                                <span>Tenure Reduced:</span>
+                                <strong id="prepaySavedTenure" class="saved-amount">0 months</strong>
+                            </div>
+                            <div class="saving-item">
+                                <span>EMI Reduced:</span>
+                                <strong id="prepaySavedEMI" class="saved-amount">₹0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
