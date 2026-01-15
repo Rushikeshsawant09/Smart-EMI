@@ -1,6 +1,14 @@
-Smart EMI – Loan & EMI Calculator
+*Smart EMI – Loan & EMI Calculator
 
 Smart EMI is a modern, responsive web-based loan and EMI calculator built using HTML, CSS, and Vanilla JavaScript. It helps users calculate monthly EMI, total interest, total payment, and view a detailed amortization schedule with a premium fintech-style UI.
+
+
+
+
+
+
+
+
 
 *Features
 
@@ -20,6 +28,12 @@ No database required
 
 Works completely on the browser
 
+
+
+
+
+
+
 *Tech Stack
 
 HTML5
@@ -27,6 +41,13 @@ HTML5
 CSS3
 
 JavaScript (Vanilla)
+
+
+
+
+
+
+
 
 *Formula Used
 
@@ -44,6 +65,12 @@ R = Monthly interest rate (annual rate / 12 / 100)
 N = Loan tenure in months
 
 
+
+
+
+
+
+
 *How to Use
 
 Enter the loan amount
@@ -58,6 +85,8 @@ View EMI, total interest, total payment, and amortization table
 
 
 
+
+
 *Project Structure
 Smart-EMI/
 │
@@ -66,6 +95,11 @@ Smart-EMI/
 │   └── style.css
 └── js/
     └── script.js
+
+
+
+
+
 
 
 
@@ -81,9 +115,12 @@ PDF / Excel export
 
 Dark mode
 
-Live Demo
 
-(Add your GitHub Pages link here)
+
+
+*Live Demo
+
+(https://rushikeshsawant09.github.io/Smart-EMI/)
 
 
 
