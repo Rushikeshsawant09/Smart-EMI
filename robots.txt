@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://smart-emi.vercel.app/sitemap.xml
+Sitemap: https://smart-emi-rho.vercel.app/sitemap.xml
